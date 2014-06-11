@@ -14,6 +14,11 @@
 		291C41C51946EC5E009BC40B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 291C41C31946EC5E009BC40B /* Main.storyboard */; };
 		291C41C71946EC5E009BC40B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 291C41C61946EC5E009BC40B /* Images.xcassets */; };
 		291C41D31946EC5E009BC40B /* AddressSelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291C41D21946EC5E009BC40B /* AddressSelectTests.swift */; };
+		292E31D51947E1420016BD2D /* APAddressEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292E31D41947E1420016BD2D /* APAddressEntryView.swift */; };
+		292E31D91947F8C20016BD2D /* APAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292E31D81947F8C20016BD2D /* APAddress.swift */; };
+		292E31E1194846320016BD2D /* CLPlacemark+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 292E31E0194846320016BD2D /* CLPlacemark+Additions.m */; };
+		292E31E3194846970016BD2D /* APAddressAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292E31E2194846970016BD2D /* APAddressAnnotation.swift */; };
+		29B6C71B19485AD0002FA1FD /* NSManagedObject+ManagedAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B6C71A19485AD0002FA1FD /* NSManagedObject+ManagedAddress.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +43,14 @@
 		291C41CC1946EC5E009BC40B /* AddressSelectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AddressSelectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		291C41D11946EC5E009BC40B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		291C41D21946EC5E009BC40B /* AddressSelectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSelectTests.swift; sourceTree = "<group>"; };
+		292E31D41947E1420016BD2D /* APAddressEntryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APAddressEntryView.swift; sourceTree = "<group>"; };
+		292E31D81947F8C20016BD2D /* APAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APAddress.swift; sourceTree = "<group>"; };
+		292E31DA194832400016BD2D /* AddressSelect-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AddressSelect-Bridging-Header.h"; sourceTree = "<group>"; };
+		292E31DF194846320016BD2D /* CLPlacemark+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLPlacemark+Additions.h"; sourceTree = "<group>"; };
+		292E31E0194846320016BD2D /* CLPlacemark+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLPlacemark+Additions.m"; sourceTree = "<group>"; };
+		292E31E2194846970016BD2D /* APAddressAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APAddressAnnotation.swift; sourceTree = "<group>"; };
+		29B6C71919485AD0002FA1FD /* NSManagedObject+ManagedAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+ManagedAddress.h"; sourceTree = "<group>"; };
+		29B6C71A19485AD0002FA1FD /* NSManagedObject+ManagedAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+ManagedAddress.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,9 +92,9 @@
 		291C41B71946EC5E009BC40B /* AddressSelect */ = {
 			isa = PBXGroup;
 			children = (
-				291C41BA1946EC5E009BC40B /* AppDelegate.swift */,
-				291C41BF1946EC5E009BC40B /* MasterViewController.swift */,
-				291C41C11946EC5E009BC40B /* DetailViewController.swift */,
+				292E31DE194832660016BD2D /* Extensions */,
+				292E31D71947E1610016BD2D /* Controllers */,
+				292E31D61947E1520016BD2D /* Classes */,
 				291C41C31946EC5E009BC40B /* Main.storyboard */,
 				291C41C61946EC5E009BC40B /* Images.xcassets */,
 				291C41BC1946EC5E009BC40B /* AddressSelect.xcdatamodeld */,
@@ -113,6 +126,38 @@
 				291C41D11946EC5E009BC40B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		292E31D61947E1520016BD2D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				291C41BA1946EC5E009BC40B /* AppDelegate.swift */,
+				292E31E2194846970016BD2D /* APAddressAnnotation.swift */,
+				292E31D41947E1420016BD2D /* APAddressEntryView.swift */,
+				292E31D81947F8C20016BD2D /* APAddress.swift */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		292E31D71947E1610016BD2D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				291C41BF1946EC5E009BC40B /* MasterViewController.swift */,
+				291C41C11946EC5E009BC40B /* DetailViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		292E31DE194832660016BD2D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				292E31DA194832400016BD2D /* AddressSelect-Bridging-Header.h */,
+				29B6C71919485AD0002FA1FD /* NSManagedObject+ManagedAddress.h */,
+				29B6C71A19485AD0002FA1FD /* NSManagedObject+ManagedAddress.m */,
+				292E31DF194846320016BD2D /* CLPlacemark+Additions.h */,
+				292E31E0194846320016BD2D /* CLPlacemark+Additions.m */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,9 +260,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				291C41BE1946EC5E009BC40B /* AddressSelect.xcdatamodeld in Sources */,
+				292E31D91947F8C20016BD2D /* APAddress.swift in Sources */,
+				292E31D51947E1420016BD2D /* APAddressEntryView.swift in Sources */,
+				292E31E1194846320016BD2D /* CLPlacemark+Additions.m in Sources */,
+				292E31E3194846970016BD2D /* APAddressAnnotation.swift in Sources */,
 				291C41BB1946EC5E009BC40B /* AppDelegate.swift in Sources */,
 				291C41C01946EC5E009BC40B /* MasterViewController.swift in Sources */,
 				291C41C21946EC5E009BC40B /* DetailViewController.swift in Sources */,
+				29B6C71B19485AD0002FA1FD /* NSManagedObject+ManagedAddress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,9 +383,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AddressSelect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AddressSelect/AddressSelect-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -344,9 +397,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AddressSelect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AddressSelect/AddressSelect-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -405,6 +460,7 @@
 				291C41D81946EC5E009BC40B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		291C41D91946EC5E009BC40B /* Build configuration list for PBXNativeTarget "AddressSelectTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +469,7 @@
 				291C41DB1946EC5E009BC40B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

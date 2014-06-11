@@ -8,11 +8,53 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+/*
+extension NSManagedObject {
+	var name : String {
+	get {
+		return self.name
+	}
+	set {
+		self.name = newValue
+	}
+	}
+	var searchString : String {
+	get {
+		return self.searchString
+	}
+	set {
+		self.searchString = newValue
+	}
+	}
+	var placemark : CLPlacemark {
+	get {
+		return self.placemark
+	}
+	set {
+		self.placemark = newValue
+	}
+	}
+	var timeStamp : NSDate {
+	get {
+		return self.timeStamp
+	}
+	set {
+		self.timeStamp = newValue
+	}
+	}
+}
+*/
+
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, AddressEntryDelegate {
 
 	var managedObjectContext: NSManagedObjectContext? = nil
 
+	struct StopPoint {
+		let Revealed = CGPointMake(0, -64)
+		let Default = CGPointMake(0, 66)
+	}
 
 	override func awakeFromNib() {
 		super.awakeFromNib()
@@ -23,23 +65,40 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 		// Do any additional setup after loading the view, typically from a nib.
 		self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
-		let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
+		let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "showAddressEntryView:")
 		self.navigationItem.rightBarButtonItem = addButton
+		self.tableView.contentInset = UIEdgeInsetsMake(-130, 0, 0, 0)
+		
+		(self.tableView.tableHeaderView as APAddressEntryView).delegate = self
 	}
 
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
+	
+	func showAddressEntryView(sender: UIBarButtonItem) {
+		
+	}
+	
+	// pragme mark - AddressEntryDelegate
+	
+	func insertNewAddress(newAddress address: APAddress) {
+		insertNewObject(address)
+	}
 
-	func insertNewObject(sender: AnyObject) {
+	func insertNewObject(address: APAddress) {
 		let context = self.fetchedResultsController.managedObjectContext
 		let entity = self.fetchedResultsController.fetchRequest.entity
 		let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name, inManagedObjectContext: context) as NSManagedObject
 		     
 		// If appropriate, configure the new managed object.
 		// Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-		newManagedObject.setValue(NSDate.date(), forKey: "timeStamp")
+		
+		newManagedObject.name = address.name
+		newManagedObject.placemark = address.placemark!
+		newManagedObject.searchString = address.searchString
+		newManagedObject.timeStamp = NSDate.date()
 		     
 		// Save the context.
 		var error: NSError? = nil
@@ -57,11 +116,55 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 		if segue.identifier == "showDetail" {
 		    let indexPath = self.tableView.indexPathForSelectedRow()
 		    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
-		    (segue.destinationViewController as DetailViewController).detailItem = object
+		    (segue.destinationViewController as DetailViewController).detailAddress = APAddress.addressFromManagedObject(object: object)
+		}
+	}
+	
+	//
+	
+	func configureContentInset(scrollView: UIScrollView) {
+		let topInset: CGFloat = scrollView.contentInset.top < 0 ? 64.0 : -66.0;
+		scrollView.contentInset = UIEdgeInsetsMake(topInset, 0, 0, 0);
+		if (topInset == -66) {
+			let centre = NSNotificationCenter.defaultCenter()
+			centre.postNotificationName("AddressViewDidHide", object: nil)
+		}
+		
+	}
+	
+	// #pragma mark - Scroll View Delegate
+	
+	override func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: CMutablePointer<CGPoint>) {
+		if scrollView == self.tableView {
+			var stopPoint: CGPoint? = nil
+			if scrollView.contentInset.top < 0 &&  -scrollView.contentOffset.y > 5 {
+				stopPoint = StopPoint().Revealed
+			} else if (scrollView.contentInset.top > 0 && scrollView.contentOffset.y > -30) {
+				stopPoint = StopPoint().Default
+			} else { return }
+			
+			UnsafePointer<CGPoint>(targetContentOffset).memory.y = stopPoint!.y
+			
+			UIView .animateWithDuration(0.3,
+				delay: 0.0,
+				usingSpringWithDamping: 1.0,
+				initialSpringVelocity: velocity.y,
+				options: nil,
+				animations: { () -> Void in
+					self.tableView.contentOffset = stopPoint!
+				},
+				completion: { (finished: Bool) -> Void in
+					self.configureContentInset(scrollView)
+				}
+			)
 		}
 	}
 
 	// #pragma mark - Table View
+	
+	override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+		return 64
+	}
 
 	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		return self.fetchedResultsController.sections.count
@@ -100,7 +203,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
 	func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
 		let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
-		cell.textLabel.text = object.valueForKey("timeStamp").description
+		let address = APAddress.addressFromManagedObject(object: object)
+		(cell.contentView.viewWithTag(10) as UILabel).text = object.name.capitalizedString
+		(cell.contentView.viewWithTag(20) as UILabel).text = address .lines(twoLines: true)
 	}
 
 	// #pragma mark - Fetched results controller
@@ -112,7 +217,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	    
 	    let fetchRequest = NSFetchRequest()
 	    // Edit the entity name as appropriate.
-	    let entity = NSEntityDescription.entityForName("Event", inManagedObjectContext: self.managedObjectContext)
+	    let entity = NSEntityDescription.entityForName("Address", inManagedObjectContext: self.managedObjectContext)
 	    fetchRequest.entity = entity
 	    
 	    // Set the batch size to a suitable number.
