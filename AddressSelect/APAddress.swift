@@ -17,7 +17,7 @@ class APAddress: NSObject {
 	var searchString: NSString = ""
 	var placemark: CLPlacemark?
 	
-	let addressProperties: String[] = [
+	let addressProperties: [String] = [
 		"subThoroughfare",
 		"thoroughfare",
 		"locality",
@@ -30,7 +30,7 @@ class APAddress: NSObject {
 	}
 	
 	func description() -> String {
-		return "name: \(self.name), searchString: \(self.searchString), placemark: \(self.placemark.description)"
+		return "name: \(self.name), searchString: \(self.searchString), placemark: \(self.placemark)"
 	}
 	
 	func lines(#twoLines: Bool) -> String {
@@ -44,11 +44,11 @@ class APAddress: NSObject {
 		return lines
 	}
 	
-	class func addressFromManagedObject(#object: NSManagedObject) -> APAddress {
+	class func addressFromManagedObject(object: NSManagedObject) -> APAddress {
 		var anAddress = APAddress()
 		anAddress.name = object.name;
 		anAddress.searchString = object.searchString;
-		anAddress.placemark = object.placemark as? CLPlacemark;
+		anAddress.placemark = object.placemark;
 		return anAddress;
 	}
 

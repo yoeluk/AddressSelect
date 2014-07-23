@@ -83,7 +83,7 @@ class APAddressEntryView: UIView, UITextFieldDelegate {
 		switch (textField.tag) {
 		case 10:
 			if string == "" {
-				wholeText = textField.text.substringToIndex(range.location)
+				wholeText = textField.text.bridgeToObjectiveC().substringWithRange(range)
 				trimmedText = wholeText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
 			} else {
 				wholeText = "\(textField.text)\(string)"
@@ -116,7 +116,7 @@ class APAddressEntryView: UIView, UITextFieldDelegate {
 				
 				// Call our Geocoder with the trimmed string
 				self.geocoder.geocodeAddressString(trimmedText, completionHandler: {
-				(placemarks: AnyObject[]!, error: NSError!) -> Void in
+				(placemarks: [AnyObject]!, error: NSError!) -> Void in
 					
 					if placemarks {
 						self.address.placemark = placemarks[0] as? CLPlacemark

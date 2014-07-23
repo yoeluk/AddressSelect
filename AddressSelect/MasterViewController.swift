@@ -91,9 +91,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 		let context = self.fetchedResultsController.managedObjectContext
 		let entity = self.fetchedResultsController.fetchRequest.entity
 		let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name, inManagedObjectContext: context) as NSManagedObject
-		     
-		// If appropriate, configure the new managed object.
-		// Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
 		
 		newManagedObject.name = address.name
 		newManagedObject.placemark = address.placemark!
@@ -103,10 +100,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 		// Save the context.
 		var error: NSError? = nil
 		if !context.save(&error) {
-		    // Replace this implementation with code to handle the error appropriately.
-		    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-		    //println("Unresolved error \(error), \(error.userInfo)")
-		    abort()
+		    println("Unresolved error \(error), \(error?.userInfo)")
+		    //abort()
 		}
 	}
 
@@ -116,7 +111,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 		if segue.identifier == "showDetail" {
 		    let indexPath = self.tableView.indexPathForSelectedRow()
 		    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
-		    (segue.destinationViewController as DetailViewController).detailAddress = APAddress.addressFromManagedObject(object: object)
+		    (segue.destinationViewController as DetailViewController).detailAddress = APAddress.addressFromManagedObject(object)
 		}
 	}
 	
@@ -134,7 +129,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	
 	// #pragma mark - Scroll View Delegate
 	
-	override func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: CMutablePointer<CGPoint>) {
+	override func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: UnsafePointer<CGPoint>) {
 		if scrollView == self.tableView {
 			var stopPoint: CGPoint? = nil
 			if scrollView.contentInset.top < 0 &&  -scrollView.contentOffset.y > 5 {
@@ -203,7 +198,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
 	func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
 		let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
-		let address = APAddress.addressFromManagedObject(object: object)
+		let address = APAddress.addressFromManagedObject(object)
 		(cell.contentView.viewWithTag(10) as UILabel).text = object.name.capitalizedString
 		(cell.contentView.viewWithTag(20) as UILabel).text = address .lines(twoLines: true)
 	}
@@ -253,9 +248,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
 	func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
 	    switch type {
-	        case NSFetchedResultsChangeInsert:
+	        case .Insert:
 	            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-	        case NSFetchedResultsChangeDelete:
+	        case .Delete:
 	            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
 	        default:
 	            return
@@ -264,13 +259,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
 	func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath) {
 	    switch type {
-	        case NSFetchedResultsChangeInsert:
+	        case .Insert:
 	            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
-	        case NSFetchedResultsChangeDelete:
+	        case .Delete:
 	            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-	        case NSFetchedResultsChangeUpdate:
+	        case .Update:
 	            self.configureCell(tableView.cellForRowAtIndexPath(indexPath), atIndexPath: indexPath)
-	        case NSFetchedResultsChangeMove:
+	        case .Move:
 	            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
 	            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)
 	        default:

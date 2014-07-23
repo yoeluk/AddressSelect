@@ -29,14 +29,14 @@ class DetailViewController: UIViewController {
 		self.presentViewController(activityController, animated:true, completion:nil)
 	}
 	
-	@IBOutlet var mapView : MKMapView = nil
+	@IBOutlet var mapView : MKMapView?
 	
 	var addressLocation: CLLocationCoordinate2D?
 	var detailAddress: APAddress? {
 	didSet {
 		if let addr = detailAddress {
 			if let loc = addr.placemark {
-				self.addressLocation = loc.location.coordinate as? CLLocationCoordinate2D
+				self.addressLocation = loc.location.coordinate
 			}
 		}
 	}
@@ -56,9 +56,9 @@ class DetailViewController: UIViewController {
 	override func viewDidAppear(animated: Bool) {
 		var ann = APAddressAnnotation(coordinate: self.addressLocation!)
 		ann.initWithTitle(self.detailAddress!.name, andSubtitle: self.detailAddress!.lines(twoLines: false))
-		self.mapView.addAnnotation(ann)
+		self.mapView!.addAnnotation(ann)
 		let region = MKCoordinateRegionMakeWithDistance(self.addressLocation!, 2000, 2000)
-		self.mapView.setRegion(region, animated: true)
+		self.mapView!.setRegion(region, animated: true)
 	}
 
 
