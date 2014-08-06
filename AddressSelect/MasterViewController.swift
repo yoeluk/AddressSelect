@@ -10,43 +10,6 @@ import UIKit
 import CoreData
 import CoreLocation
 
-/*
-extension NSManagedObject {
-	var name : String {
-	get {
-		return self.name
-	}
-	set {
-		self.name = newValue
-	}
-	}
-	var searchString : String {
-	get {
-		return self.searchString
-	}
-	set {
-		self.searchString = newValue
-	}
-	}
-	var placemark : CLPlacemark {
-	get {
-		return self.placemark
-	}
-	set {
-		self.placemark = newValue
-	}
-	}
-	var timeStamp : NSDate {
-	get {
-		return self.timeStamp
-	}
-	set {
-		self.timeStamp = newValue
-	}
-	}
-}
-*/
-
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, AddressEntryDelegate {
 
 	var managedObjectContext: NSManagedObjectContext? = nil
@@ -78,7 +41,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	}
 	
 	func showAddressEntryView(sender: UIBarButtonItem) {
-		
+		self.tableView.setContentOffset(CGPointMake(0, -64), animated: true)
 	}
 	
 	// pragme mark - AddressEntryDelegate
@@ -124,12 +87,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 			let centre = NSNotificationCenter.defaultCenter()
 			centre.postNotificationName("AddressViewDidHide", object: nil)
 		}
-		
 	}
 	
 	// #pragma mark - Scroll View Delegate
 	
-	override func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: UnsafePointer<CGPoint>) {
+	override func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 		if scrollView == self.tableView {
 			var stopPoint: CGPoint? = nil
 			if scrollView.contentInset.top < 0 &&  -scrollView.contentOffset.y > 5 {
@@ -138,7 +100,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 				stopPoint = StopPoint().Default
 			} else { return }
 			
-			UnsafePointer<CGPoint>(targetContentOffset).memory.y = stopPoint!.y
+			UnsafeMutablePointer<CGPoint>(targetContentOffset).memory.y = stopPoint!.y
 			
 			UIView .animateWithDuration(0.3,
 				delay: 0.0,
@@ -188,10 +150,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 		        
 		    var error: NSError? = nil
 		    if !context.save(&error) {
-		        // Replace this implementation with code to handle the error appropriately.
-		        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-		        //println("Unresolved error \(error), \(error.userInfo)")
-		        abort()
+		        println("Unresolved error \(error), \(error?.userInfo)")
 		    }
 		}
 	}
@@ -224,18 +183,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	    
 	    fetchRequest.sortDescriptors = [sortDescriptor]
 	    
-	    // Edit the section name key path and cache name if appropriate.
-	    // nil for section name key path means "no sections".
 	    let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: "Master")
 	    aFetchedResultsController.delegate = self
 	    _fetchedResultsController = aFetchedResultsController
 	    
 		var error: NSError? = nil
 		if !_fetchedResultsController!.performFetch(&error) {
-		     // Replace this implementation with code to handle the error appropriately.
-		     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-	         //println("Unresolved error \(error), \(error.userInfo)")
-		     abort()
+	         println("Unresolved error \(error), \(error?.userInfo)")
+		     //abort()
 		}
 	    
 	    return _fetchedResultsController!

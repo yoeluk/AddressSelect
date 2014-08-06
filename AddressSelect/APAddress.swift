@@ -25,7 +25,7 @@ class APAddress: NSObject {
 		"postalCode"
 	]
 	
-	init() {
+	override init() {
 		super.init()
 	}
 	

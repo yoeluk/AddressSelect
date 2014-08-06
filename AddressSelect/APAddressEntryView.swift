@@ -20,7 +20,7 @@ class APAddressEntryView: UIView, UITextFieldDelegate {
 	var resultLabel: UILabel? = nil
 	var addButton: UIButton? = nil
 
-	init(coder aDecoder: NSCoder!) {
+	required init(coder aDecoder: NSCoder!) {
 		super.init(coder: aDecoder)
 		if (self != nil) {
 			nameTextField = self.viewWithTag(10) as? UITextField
@@ -83,14 +83,16 @@ class APAddressEntryView: UIView, UITextFieldDelegate {
 		switch (textField.tag) {
 		case 10:
 			if string == "" {
-				wholeText = textField.text.bridgeToObjectiveC().substringWithRange(range)
+				var start = advance(string.startIndex, range.location)
+				var end = advance(string.startIndex, range.location + range.length)
+				wholeText = textField.text.substringWithRange(Range<String.Index>(start: start, end: end))
 				trimmedText = wholeText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
 			} else {
 				wholeText = "\(textField.text)\(string)"
 				trimmedText = wholeText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
 			}
 			self.address.name = trimmedText;
-			if (Bool(trimmedText.length) && self.address.placemark) {
+			if (Bool(trimmedText.length) && nil != self.address.placemark ) {
 				self.addButton!.enabled = true;
 			} else { self.addButton!.enabled = false }
 			break;
@@ -118,7 +120,7 @@ class APAddressEntryView: UIView, UITextFieldDelegate {
 				self.geocoder.geocodeAddressString(trimmedText, completionHandler: {
 				(placemarks: [AnyObject]!, error: NSError!) -> Void in
 					
-					if placemarks {
+					if (placemarks != nil) {
 						self.address.placemark = placemarks[0] as? CLPlacemark
 						self.resultLabel!.text = self.address.lines(twoLines: true)
 						self.address.searchString = trimmedText;
