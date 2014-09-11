@@ -20,32 +20,30 @@ class APAddressEntryView: UIView, UITextFieldDelegate {
 	var resultLabel: UILabel? = nil
 	var addButton: UIButton? = nil
 
-	required init(coder aDecoder: NSCoder!) {
+	required init(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-		if (self != nil) {
-			nameTextField = self.viewWithTag(10) as? UITextField
-			if let textField = nameTextField {
-				textField.delegate = self;
-			} else {
-				// error: the address name textField is not defined
-			}
-			addressTextField = self.viewWithTag(20) as? UITextField
-			if let textField = self.addressTextField {
-				textField.delegate = self;
-			} else {
-				// error: the address textField is not defined
-			}
-			resultLabel = self.viewWithTag(30) as? UILabel
-			addButton = self.viewWithTag(40) as? UIButton
-			if let button = addButton {
-				button.addTarget(self, action:"doSomethingCool:", forControlEvents: .TouchUpInside)
-			} else {
-				// error: the add address button is not defined
-			}
-			
-			let centre = NSNotificationCenter.defaultCenter()
-			centre.addObserver(self, selector: "clear", name: "AddressViewDidHide", object: nil)
+		nameTextField = self.viewWithTag(10) as? UITextField
+		if let textField = nameTextField {
+			textField.delegate = self;
+		} else {
+			// error: the address name textField is not defined
 		}
+		addressTextField = self.viewWithTag(20) as? UITextField
+		if let textField = self.addressTextField {
+			textField.delegate = self;
+		} else {
+			// error: the address textField is not defined
+		}
+		resultLabel = self.viewWithTag(30) as? UILabel
+		addButton = self.viewWithTag(40) as? UIButton
+		if let button = addButton {
+			button.addTarget(self, action:"doSomethingCool:", forControlEvents: .TouchUpInside)
+		} else {
+			// error: the add address button is not defined
+		}
+		
+		let centre = NSNotificationCenter.defaultCenter()
+		centre.addObserver(self, selector: "clear", name: "AddressViewDidHide", object: nil)
 	}
 	
 	let geocoder = CLGeocoder()

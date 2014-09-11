@@ -24,7 +24,8 @@ class DetailViewController: UIViewController {
 			UIActivityTypePrint,
 			UIActivityTypeCopyToPasteboard,
 			UIActivityTypeAssignToContact,
-			UIActivityTypeSaveToCameraRoll]
+			UIActivityTypeSaveToCameraRoll
+		]
 		
 		self.presentViewController(activityController, animated:true, completion:nil)
 	}

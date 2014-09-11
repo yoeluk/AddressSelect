@@ -73,7 +73,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "showDetail" {
 		    let indexPath = self.tableView.indexPathForSelectedRow()
-		    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
+		    let object = self.fetchedResultsController.objectAtIndexPath(indexPath!) as NSManagedObject
 		    (segue.destinationViewController as DetailViewController).detailAddress = APAddress.addressFromManagedObject(object)
 		}
 	}
@@ -91,7 +91,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	
 	// #pragma mark - Scroll View Delegate
 	
-	override func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+	override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 		if scrollView == self.tableView {
 			var stopPoint: CGPoint? = nil
 			if scrollView.contentInset.top < 0 &&  -scrollView.contentOffset.y > 5 {
@@ -119,16 +119,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
 	// #pragma mark - Table View
 	
-	override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 		return 64
 	}
 
 	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		return self.fetchedResultsController.sections.count
+		return self.fetchedResultsController.sections!.count
 	}
 
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		let sectionInfo = self.fetchedResultsController.sections[section] as NSFetchedResultsSectionInfo
+		let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
 		return sectionInfo.numberOfObjects
 	}
 
@@ -171,7 +171,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	    
 	    let fetchRequest = NSFetchRequest()
 	    // Edit the entity name as appropriate.
-	    let entity = NSEntityDescription.entityForName("Address", inManagedObjectContext: self.managedObjectContext)
+	    let entity = NSEntityDescription.entityForName("Address", inManagedObjectContext: self.managedObjectContext!)
 	    fetchRequest.entity = entity
 	    
 	    // Set the batch size to a suitable number.
@@ -183,7 +183,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	    
 	    fetchRequest.sortDescriptors = [sortDescriptor]
 	    
-	    let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: "Master")
+	    let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
 	    aFetchedResultsController.delegate = self
 	    _fetchedResultsController = aFetchedResultsController
 	    
@@ -219,7 +219,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 	        case .Delete:
 	            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
 	        case .Update:
-	            self.configureCell(tableView.cellForRowAtIndexPath(indexPath), atIndexPath: indexPath)
+	            self.configureCell(tableView.cellForRowAtIndexPath(indexPath)!, atIndexPath: indexPath)
 	        case .Move:
 	            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
 	            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Fade)

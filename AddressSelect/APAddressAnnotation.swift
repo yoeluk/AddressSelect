@@ -16,12 +16,12 @@ class APAddressAnnotation: NSObject, MKAnnotation {
 	var subtitle: String = ""
 	
 	var coordinate: CLLocationCoordinate2D {
-	get {
-		return self.innerCoordinate!
-	}
-	set {
-		self.innerCoordinate = newValue
-	}
+		get {
+			return self.innerCoordinate!
+		}
+		set {
+			self.innerCoordinate = newValue
+		}
 	}
 	
 	init(coordinate:CLLocationCoordinate2D) {

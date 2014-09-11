@@ -35,7 +35,7 @@
 	NSString *vcardString = [[NSString alloc] initWithData:vcard encoding:NSASCIIStringEncoding];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *documentsDirectory = paths[0];
 	NSString *filePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.loc.vcf", name]];
 	
 	CFRelease(person);
